@@ -1,1 +1,75 @@
+#!/usr/bin/env python3
 
+import json
+import argparse
+
+parser=argparse.ArgumentParser()
+
+parser.add_argument('param1')
+parser.add_argument('param2')
+parser.add_argument('param3')
+
+parser.add_argument('--active', dest='active', action='store_true', default=False, help="active connections")
+parser.add_argument('--loadMsec', dest='loadMsec', action='store_true', default=False, help="loadMsec")
+parser.add_argument('--reading', dest='reading', action='store_true', default=False, help="reading connections")
+parser.add_argument('--writing', dest='writing', action='store_true', default=False, help="writing")
+parser.add_argument('--waiting', dest='waiting', action='store_true', default=False, help="waiting")
+parser.add_argument('--accepted', dest='accepted', action='store_true', default=False, help="accepted connections")
+parser.add_argument('--handled', dest='handled', action='store_true', default=False, help="handled")
+parser.add_argument('--requests', dest='requests', action='store_true', default=False, help="requests")
+parser.add_argument('--server_zones', dest='server_zones',action='store_true', default=False)
+parser.add_argument('--service',dest='service',action='store_true', default=False)
+
+args =parser.parse_args()
+
+if args.active:
+	with open('json','r') as f:
+		data = json.loads(f.read())
+		print(float(data['connections']['active']))
+elif args.loadMsec:
+	with open('json','r') as f:
+		data = json.loads(f.read())
+		print(float(data['loadMsec']))
+elif args.reading:
+	with open('json','r') as f:
+		data = json.loads(f.read())
+		print(float(data['connections']['reading']))
+elif args.writing:
+	with open('json','r') as f:
+		data = json.loads(f.read())
+		print(float(data['connections']['writing']))
+elif args.waiting:
+	with open('json','r') as f:
+		data = json.loads(f.read())
+		print(float(data['connections']['waiting']))
+elif args.accepted:
+	with open('json','r') as f:
+		data = json.loads(f.read())
+		print(float(data['connections']['accepted']))
+elif args.handled:
+	with open('json','r') as f:
+		data = json.loads(f.read())
+		print(float(data['connections']['handled']))
+elif args.requests:
+	with open('json','r') as f:
+		data = json.loads(f.read())
+		print(float(data['connections']['requests']))
+elif args.server_zones:
+	if args.param1=='responses':
+		with open('json','r') as f:
+			data = json.loads(f.read())
+			print(float(data['serverZones']['localhost']['responses'][args.param2]))
+	else:
+		with open('json','r') as f:
+			data = json.loads(f.read())
+		print(float(data['serverZones']['localhost'][args.param1]))
+elif args.service:
+	server=int(args.param1)
+	if args.param2=='responses':
+		with open('json','r') as f:
+			data = json.loads(f.read())
+			print(float(data['upstreamZones']['service'][server][args.param2][args.param3]))
+	else:
+		with open('json','r') as f:
+			data = json.loads(f.read())
+			print(float(data['upstreamZones']['service'][server][args.param2]))
